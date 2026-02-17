@@ -69,21 +69,7 @@ This project was created to explore and practice:
 - Efficient task and queue management using FreeRTOS  
 - General embedded architecture for low-memory, scalable designs  
 
----
 
-## Project Structure
-
-ra02-application-layer/
-├── Core/ # Core STM32 HAL and driver files
-├── AO/ # Active Object implementations
-│ ├── tx_ao.c
-│ ├── rx_ao.c
-│ └── ao_base.c
-├── Queue/ # Vyukov MPSC queue implementation
-├── StateMachine/ # H-state machine functions
-├── Middlewares/ # FreeRTOS static tasks and headers
-├── .ioc # STM32CubeMX project file
-└── README.md
 
 
 
