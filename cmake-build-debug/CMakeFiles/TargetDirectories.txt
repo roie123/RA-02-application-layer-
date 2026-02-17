@@ -1,0 +1,3 @@
+/home/royivri/STM32CubeIDE/workspace_1.19.0/ra-02_ACTOR/cmake-build-debug/CMakeFiles/ra-02_ACTOR.elf.dir
+/home/royivri/STM32CubeIDE/workspace_1.19.0/ra-02_ACTOR/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/royivri/STM32CubeIDE/workspace_1.19.0/ra-02_ACTOR/cmake-build-debug/CMakeFiles/rebuild_cache.dir
