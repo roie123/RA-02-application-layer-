@@ -23,7 +23,7 @@
 #include "spi.h"
 #include "usart.h"
 #include "gpio.h"
-
+#include "LoRa/LoRa_Startup.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -96,6 +96,7 @@ int main(void)
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
+  LoRa_Startup();
 
   /* USER CODE END 2 */
 
