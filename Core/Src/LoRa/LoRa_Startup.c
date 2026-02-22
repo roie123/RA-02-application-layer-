@@ -8,8 +8,6 @@
 #include "FreeRTOS.h"
 #include "semphr.h"
 #include "spi.h"
-LoRa myLoRa;
-SemaphoreHandle_t lora_mutex_handle;
 
 
 
@@ -22,56 +20,36 @@ SemaphoreHandle_t lora_mutex_handle;
  * @return 1 if initialization succeeds, 0 if it fails.
  */
 
-uint8_t LoRa_Startup() {
+LoRa * LoRa_Startup(LoRa * lora_instance) {
 
-    myLoRa = newLoRa();
+     // LoRa myLora = newLoRa();
+    // lora_instance=&myLora;
 
 
-    lora_mutex_handle = xSemaphoreCreateMutex();
-    assert(lora_mutex_handle != NULL); // Check for successful mutex creation.
 
-    myLoRa.CS_port = NSS_GPIO_Port;
-    myLoRa.CS_pin = NSS_Pin;
-    myLoRa.reset_port = RESET_GPIO_Port;
-    myLoRa.reset_pin = RESET_Pin;
-    myLoRa.DIO0_port = DID0_GPIO_Port;
-    myLoRa.DIO0_pin = DID0_Pin;
-    myLoRa.power = POWER_17db;
-    myLoRa.hSPIx = &hspi2;
-    LoRa_reset(&myLoRa);
+    lora_instance->CS_port = NSS_GPIO_Port;
+    lora_instance->CS_pin = NSS_Pin;
+    lora_instance->reset_port = RESET_GPIO_Port;
+    lora_instance->reset_pin = RESET_Pin;
+    lora_instance->DIO0_port = DID0_GPIO_Port;
+    lora_instance->DIO0_pin = DID0_Pin;
+    lora_instance->power = POWER_17db;
+    lora_instance->hSPIx = &hspi2;
+    LoRa_reset(lora_instance);
 
-    if (LoRa_init(&myLoRa) !=LORA_OK) {
+    if (LoRa_init(lora_instance) !=LORA_OK) {
         return 0;
     }
 
-    LoRa_startReceiving(&myLoRa);
+    LoRa_startReceiving(lora_instance);
 
 
 
 
 
-    return 1;
-}
-uint8_t LoRa_receive_safe(LoRa *lora, uint8_t *data, uint8_t length, SemaphoreHandle_t lora_mutex_handle) {
-    uint8_t bytes = 0;
-    if (xSemaphoreTake(lora_mutex_handle, portMAX_DELAY) == pdTRUE) {
-        bytes = LoRa_receive(lora, data, length);
-        xSemaphoreGive(lora_mutex_handle);
-    }
-    return bytes;
-
-
+    return lora_instance;
 }
 
 
-uint8_t LoRa_transmit_safe(uint8_t *data, uint8_t length, uint16_t timeout) {
-    uint8_t status = 0;
 
 
-    if (xSemaphoreTake(lora_mutex_handle, portMAX_DELAY) == pdTRUE) {
-        status = LoRa_transmit(&myLoRa, data, length, timeout);
-        xSemaphoreGive(lora_mutex_handle);
-    }
-
-    return status;
-}

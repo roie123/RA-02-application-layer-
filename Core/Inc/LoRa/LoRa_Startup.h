@@ -9,10 +9,8 @@
 #include "LoRa.h"
 #include "semphr.h"
 
-extern LoRa myLoRa;
-extern SemaphoreHandle_t lora_mutex_handle;
 
-uint8_t LoRa_Startup();
+LoRa* LoRa_Startup();
 uint8_t LoRa_receive_safe(LoRa *lora, uint8_t *data, uint8_t length, SemaphoreHandle_t lora_mutex_handle);
 uint8_t LoRa_transmit_safe(uint8_t *data, uint8_t length, uint16_t timeout);
 
