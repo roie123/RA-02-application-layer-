@@ -44,7 +44,7 @@ void Active_start(Active * const me,
     StackType_t *stk_sto = stackSto;
     uint32_t stk_depth = (stackSize / sizeof(StackType_t));
 
-    (void)opt; /* unused parameter */
+    // (void)opt; /* unused parameter */
 //TODO init the queue
     configASSERT(me->queue);            /* queue must be created */
 
@@ -63,7 +63,7 @@ void Active_start(Active * const me,
 /*..........................................................................*/
 void Active_post(Active * const me, Event const * const e) {
    //TODO add to queue
-    configASSERT(status == pdTRUE);
+    // configASSERT(status == pdTRUE);
 }
 
 /*..........................................................................*/
@@ -71,7 +71,7 @@ void Active_postFromISR(Active * const me, Event const * const e,
                         BaseType_t *pxHigherPriorityTaskWoken)
 {
 //todo : add to queue from ISR
-    configASSERT(status == pdTRUE);
+    // configASSERT(status == pdTRUE);
 }
 
 /*--------------------------------------------------------------------------*/

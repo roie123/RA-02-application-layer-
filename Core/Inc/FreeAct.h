@@ -4,6 +4,8 @@
 
 #ifndef FREEACT_H
 #define FREEACT_H
+#include <stdbool.h>
+
 #include "FreeRTOS.h"
 #include "portmacro.h"
 #include "projdefs.h"
@@ -14,11 +16,18 @@
 /*---------------------------------------------------------------------------*/
 /* Event facilities... */
 
-typedef uint16_t Signal; /* event signal */
+typedef uint32_t Signal; /* event signal */
 
 enum ReservedSignals {
     INIT_SIG, /* dispatched to AO before entering event-loop */
-    USER_SIG  /* first signal available to the users */
+    USER_SIG , /* first signal available to the users */
+
+
+    RA02_INIT_EVT  ,
+   RA02_RX_REQ_EVT,
+   RA02_RX_DONE_EVT,
+   RA02_TX_REQ_EVT,
+   RA02_TX_DONE_EVT
 };
 
 typedef enum {
@@ -29,6 +38,7 @@ typedef enum {
 /* Event base class */
 typedef struct {
     Signal sig; /* event signal */
+
     /* event parameters added in subclasses of Event */
 } Event;
 
@@ -38,13 +48,19 @@ typedef struct {
 typedef struct Active Active; /* forward declaration */
 
 typedef void (*DispatchHandler)(Active * const me, Event const * const e);
-
+typedef  struct QueueTable {
+ bool (*post)(void *queue, Event const * const e);
+ bool (*postFROM_ISR)(void *queue, Event const * const e);
+    Event * (*receive)(void *queue);
+};
 /* Active Object base class */
 struct Active {
     TaskHandle_t thread;     /* private thread */
     StaticTask_t thread_cb;  /* thread control-block (FreeRTOS static alloc) */
 
-    QueueHandle_t queue;     /* private message queue */
+    void *queue;     /* private message queue - can be freeRTOS or my own  */
+    struct QueueTable const *queue_ops; /* the queue operations */
+
     StaticQueue_t queue_cb;  /* queue control-block (FreeRTOS static alloc) */
 
     DispatchHandler dispatch; /* pointer to the dispatch() function */
